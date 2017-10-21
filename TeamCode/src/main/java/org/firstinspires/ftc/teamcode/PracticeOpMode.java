@@ -66,15 +66,15 @@ public class PracticeOpMode extends OpMode{
         rightFrontDrive.setPower(rightPower);
         rightBackDrive.setPower(rightPower);
         if (gamepad1.left_bumper) {
-            strafeFrontDrive.setPower(STRAFE_POWER);//makes left bumper set strafe motors to positive
-            strafeBackDrive.setPower(STRAFE_POWER);
+            strafeFrontDrive.setPower(-STRAFE_POWER);//makes left bumper set strafe motors to positive
+            strafeBackDrive.setPower(-STRAFE_POWER);
         } else {
             strafeFrontDrive.setPower(0); //makes not pressing a bumper set strafe motors to 0
             strafeBackDrive.setPower(0);
         }
         if (gamepad1.right_bumper) {
-            strafeFrontDrive.setPower(-STRAFE_POWER); //makes right bumper set strafe motors to negative
-            strafeBackDrive.setPower(-STRAFE_POWER);
+            strafeFrontDrive.setPower(STRAFE_POWER); //makes right bumper set strafe motors to negative
+            strafeBackDrive.setPower(STRAFE_POWER);
         } else {
             strafeFrontDrive.setPower(0); //makes not pressing a bumper set strafe motors to 0 (again)
             strafeBackDrive.setPower(0);

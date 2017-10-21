@@ -19,7 +19,7 @@ public class PracticeOpMode extends OpMode{
     private DcMotor strafeFrontDrive = null; //use bars
     private DcMotor strafeBackDrive = null;
 
-    private static final double TURN_POWER = 0.5;//sets constant for turn power
+    private static final double TURN_POWER = 0.75;//sets constant for turn power
     private static final double STRAFE_POWER = 0.5;//sets constant for strafe power
 
     @Override

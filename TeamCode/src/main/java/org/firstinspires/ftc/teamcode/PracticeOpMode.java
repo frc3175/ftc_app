@@ -68,14 +68,17 @@ public class PracticeOpMode extends OpMode{
         if (gamepad1.left_bumper) {
             strafeFrontDrive.setPower(STRAFE_POWER);//makes left bumper set strafe motors to positive
             strafeBackDrive.setPower(STRAFE_POWER);
+        } else {
+            strafeFrontDrive.setPower(0); //makes not pressing a bumper set strafe motors to 0
+            strafeBackDrive.setPower(0);
         }
         if (gamepad1.right_bumper) {
             strafeFrontDrive.setPower(-STRAFE_POWER); //makes right bumper set strafe motors to negative
             strafeBackDrive.setPower(-STRAFE_POWER);
         } else {
-            strafeFrontDrive.setPower(0); //makes not pressing a bumper set strafe motors to 0
+            strafeFrontDrive.setPower(0); //makes not pressing a bumper set strafe motors to 0 (again)
             strafeBackDrive.setPower(0);
-
+        }
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);

@@ -18,12 +18,14 @@ public class PracticeOpMode extends OpMode{
     private DcMotor rightBackDrive = null;
     private DcMotor strafeFrontDrive = null; //use bars
     private DcMotor strafeBackDrive = null;
+
     private static final double TURN_POWER = 0.5;//sets constant for turn power
     private static final double STRAFE_POWER = 0.5;//sets constant for strafe power
 
     @Override
     public void init() {
         telemetry.addData("Status", "Initializing");//tells the user(s) that the robot is initializing
+
         leftFrontDrive = hardwareMap.get(DcMotor.class, "LeftFrontDrive"); //initializes motors
         leftBackDrive = hardwareMap.get(DcMotor.class, "LeftBackDrive");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "RightFrontDrive");
@@ -34,6 +36,7 @@ public class PracticeOpMode extends OpMode{
         rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
         //reverses direction of right motors, change if the direction is wrong
+
         telemetry.addData("Status", "Initialized"); //tells the user(s) init. is finished
     }
 
@@ -69,7 +72,10 @@ public class PracticeOpMode extends OpMode{
         if (gamepad1.right_bumper) {
             strafeFrontDrive.setPower(-STRAFE_POWER); //makes right bumper set strafe motors to negative
             strafeBackDrive.setPower(-STRAFE_POWER);
-        }
+        } else {
+            strafeFrontDrive.setPower(0); //makes not pressing a bumper set strafe motors to 0
+            strafeBackDrive.setPower(0);
+
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);

@@ -18,6 +18,10 @@ public class PracticeOpMode extends OpMode{
 
     private static final double TURN_POWER = 0.75;//sets constant for turn power
     private static final double STRAFE_POWER = 0.5;//sets constant for strafe power
+    private static final double ARM_POWER = 0.5; //sets arm power constant
+    private static final double CLAW_OPEN = .5; //sets constants for claw open/closed positions
+    private static final double CLAW_CLOSED = 0;
+
 
     @Override
     public void init() {
@@ -66,6 +70,21 @@ public class PracticeOpMode extends OpMode{
         } else {
             robot.strafeFrontDrive.setPower(0); //makes not pressing a bumper set strafe motors to 0 (again)
             robot.strafeBackDrive.setPower(0);
+
+        }
+        if (gamepad2.b){
+            robot.arm.setPower(ARM_POWER); //makes the b button raise the arm
+        } else if (gamepad2.a){
+            robot.arm.setPower(-ARM_POWER); //makes the a button lower the arm
+        } else {
+            robot.arm.setPower(0); //makes sure that the motor is not moving if a or b is not pressed
+        }
+        if (gamepad2.left_bumper) {
+            robot.leftClaw.setPosition(CLAW_CLOSED); //closes the claw with lb
+            robot.rightClaw.setPosition(CLAW_CLOSED);
+        } else if (gamepad2.right_bumper){
+            robot.leftClaw.setPosition(CLAW_OPEN); //opens the claw with rb
+            robot.rightClaw.setPosition(CLAW_OPEN);
         }
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());

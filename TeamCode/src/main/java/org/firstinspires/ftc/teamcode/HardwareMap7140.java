@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 /**
  * Created by tonyp on 10/28/2017.
@@ -14,6 +15,9 @@ public class HardwareMap7140 {
     public DcMotor rightBackDrive = null;
     public DcMotor strafeFrontDrive = null; //use bars
     public DcMotor strafeBackDrive = null;
+    public DcMotor arm = null;
+    public Servo leftClaw = null;
+    public Servo rightClaw = null;
 
     public HardwareMap HMap = null; //name HardwareMap to HMap
 
@@ -29,6 +33,11 @@ public class HardwareMap7140 {
         rightBackDrive = HMap.get(DcMotor.class, "RightBackDrive");
         strafeFrontDrive = HMap.get(DcMotor.class, "StrafeFrontDrive");
         strafeBackDrive = HMap.get(DcMotor.class, "StrafeBackDrive");
+        arm = HMap.get(DcMotor.class, "Arm");
+        leftClaw = HMap.get(Servo.class, "LeftClaw");
+        rightClaw = HMap.get(Servo.class, "RightClaw");
+
+
 
         rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);

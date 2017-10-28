@@ -45,6 +45,8 @@ public class Teleop10545 extends OpMode{
         robot.backLeftDrive.setPower(leftPower);
         robot.backRightDrive.setPower(rightPower);
         robot.frontRightDrive.setPower(rightPower);
+
+
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runTime.toString());
         telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);

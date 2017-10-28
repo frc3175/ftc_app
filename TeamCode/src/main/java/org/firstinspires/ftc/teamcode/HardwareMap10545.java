@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -18,6 +19,12 @@ public class HardwareMap10545 {
     public DcMotor backLeftDrive = null; // declares the variable backLeftDrive
     public DcMotor backRightDrive = null; //declares the variable backRightDrive
 
+    public DcMotor upDownArm = null;
+    public DcMotor inOutArm = null;
+
+    public Servo leftClaw = null;
+    public Servo rightClaw = null;
+
     public HardwareMap map = null;
     private ElapsedTime period  = new ElapsedTime();
 
@@ -32,5 +39,11 @@ public class HardwareMap10545 {
         backRightDrive = map.get(DcMotor.class, "backRightDrive"); // initializing backRightDrive
         backLeftDrive = map.get(DcMotor.class, "backLeftDrive"); // initializing bckLeftDrive
         frontLeftDrive.setDirection(DcMotorSimple.Direction.REVERSE); // reverses direction of the frontLeftDrive
+
+        upDownArm = map.get(DcMotor.class, "upDownArm");
+        inOutArm = map.get(DcMotor.class, "inOutArm");
+
+        leftClaw = map.get(Servo.class, "leftClaw");
+        rightClaw = map.get(Servo.class, "rightClaw");
     }
 }

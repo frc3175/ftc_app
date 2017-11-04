@@ -9,9 +9,9 @@ import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 public class Register7140 {
     public void register(OpModeManager mgr) {
         mgr.register("AutonBlueLeft7140", AutonBlueLeft7140.class);
-        mgr.register("AutonBlueRight7140", AutonBlueLeft7140.class);
-        mgr.register("AutonrRedLeft7140", AutonBlueLeft7140.class);
-        mgr.register("AutonrRedRight7140", AutonBlueLeft7140.class);
-        mgr.register("PracticeOpMode", AutonBlueLeft7140.class);
+        mgr.register("AutonBlueRight7140", AutonBlueRight7140.class);
+        mgr.register("AutonrRedLeft7140", AutonRedLeft7140.class);
+        mgr.register("AutonrRedRight7140", AutonRedRight7140.class);
+        mgr.register("PracticeOpMode", PracticeOpMode.class);
     }
 }

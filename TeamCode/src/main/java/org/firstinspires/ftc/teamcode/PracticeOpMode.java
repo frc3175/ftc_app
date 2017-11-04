@@ -2,20 +2,29 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
  * Created by tonyp on 10/21/2017.
  */
-@TeleOp (name = "PracticeOpMode")
+@TeleOp (name = "PracticeOpMode", group="TeleOp")
 public class PracticeOpMode extends OpMode{
 
     private ElapsedTime runtime = new ElapsedTime();
 
-    public HardwareMap7140 robot = new HardwareMap7140();
-    public HardwareMap HMap = null;
-
+    private DcMotor leftFrontDrive = null; //use left stick to go forward/back, use right stick to turn
+    private DcMotor leftBackDrive = null;
+    private DcMotor rightFrontDrive = null;
+    private DcMotor rightBackDrive = null;
+    private DcMotor strafeFrontDrive = null; //use bars
+    private DcMotor strafeBackDrive = null;
+    private DcMotor arm = null;
+    private Servo leftClaw = null;
+    private Servo rightClaw = null;
+    private ColorSensor CSensor = null;
     private static final double TURN_POWER = 0.75;//sets constant for turn power
     private static final double STRAFE_POWER = 0.5;//sets constant for strafe power
     private static final double ARM_POWER = 0.5; //sets arm power constant
@@ -27,7 +36,21 @@ public class PracticeOpMode extends OpMode{
     public void init() {
         telemetry.addData("Status", "Initializing");//tells the user(s) that the robot is initializing
 
-        robot.init(HMap);
+        leftFrontDrive = hardwareMap.get(DcMotor.class, "LeftFrontDrive"); //initializes motors
+        leftBackDrive = hardwareMap.get(DcMotor.class, "LeftBackDrive");
+        rightFrontDrive = hardwareMap.get(DcMotor.class, "RightFrontDrive");
+        rightBackDrive = hardwareMap.get(DcMotor.class, "RightBackDrive");
+        strafeFrontDrive = hardwareMap.get(DcMotor.class, "StrafeFrontDrive");
+        strafeBackDrive = hardwareMap.get(DcMotor.class, "StrafeBackDrive");
+        arm = hardwareMap.get(DcMotor.class, "Arm");
+        leftClaw = hardwareMap.get(Servo.class, "LeftClaw");
+        rightClaw = hardwareMap.get(Servo.class, "RightClaw");
+
+        CSensor = hardwareMap.get(ColorSensor.class, "ColorSensor");
+
+        rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
+        //reverses direction of right motors, change if the direction is wrong
 
         telemetry.addData("Status", "Initialized"); //tells the user(s) init. is finished
     }
@@ -53,38 +76,38 @@ public class PracticeOpMode extends OpMode{
         double rightPower = -gamepad1.left_stick_y;
         leftPower += gamepad1.right_stick_x * TURN_POWER; //enables turns
         rightPower -= gamepad1.right_stick_x * TURN_POWER;//uses right stick left&right
-        robot.leftFrontDrive.setPower(leftPower);//enables forward&backward movement
-        robot.leftBackDrive.setPower(leftPower);//uses left stick up&down
-        robot.rightFrontDrive.setPower(rightPower);
-        robot.rightBackDrive.setPower(rightPower);
+        leftFrontDrive.setPower(leftPower);//enables forward&backward movement
+        leftBackDrive.setPower(leftPower);//uses left stick up&down
+        rightFrontDrive.setPower(rightPower);
+        rightBackDrive.setPower(rightPower);
         if (gamepad1.left_bumper) {
-            robot.strafeFrontDrive.setPower(-STRAFE_POWER);//makes left bumper set strafe motors to positive
-            robot.strafeBackDrive.setPower(-STRAFE_POWER);
+            strafeFrontDrive.setPower(-STRAFE_POWER);//makes left bumper set strafe motors to positive
+            strafeBackDrive.setPower(-STRAFE_POWER);
         } else {
-            robot.strafeFrontDrive.setPower(0); //makes not pressing a bumper set strafe motors to 0
-            robot.strafeBackDrive.setPower(0);
+            strafeFrontDrive.setPower(0); //makes not pressing a bumper set strafe motors to 0
+            strafeBackDrive.setPower(0);
         }
         if (gamepad1.right_bumper) {
-            robot.strafeFrontDrive.setPower(STRAFE_POWER); //makes right bumper set strafe motors to negative
-            robot.strafeBackDrive.setPower(STRAFE_POWER);
+            strafeFrontDrive.setPower(STRAFE_POWER); //makes right bumper set strafe motors to negative
+            strafeBackDrive.setPower(STRAFE_POWER);
         } else {
-            robot.strafeFrontDrive.setPower(0); //makes not pressing a bumper set strafe motors to 0 (again)
-            robot.strafeBackDrive.setPower(0);
+            strafeFrontDrive.setPower(0); //makes not pressing a bumper set strafe motors to 0 (again)
+            strafeBackDrive.setPower(0);
 
         }
         if (gamepad2.b){
-            robot.arm.setPower(ARM_POWER); //makes the b button raise the arm
+            arm.setPower(ARM_POWER); //makes the b button raise the arm
         } else if (gamepad2.a){
-            robot.arm.setPower(-ARM_POWER); //makes the a button lower the arm
+            arm.setPower(-ARM_POWER); //makes the a button lower the arm
         } else {
-            robot.arm.setPower(0); //makes sure that the motor is not moving if a or b is not pressed
+            arm.setPower(0); //makes sure that the motor is not moving if a or b is not pressed
         }
         if (gamepad2.left_bumper) {
-            robot.leftClaw.setPosition(CLAW_CLOSED); //closes the claw with lb
-            robot.rightClaw.setPosition(CLAW_CLOSED);
+            leftClaw.setPosition(CLAW_CLOSED); //closes the claw with lb
+            rightClaw.setPosition(CLAW_CLOSED);
         } else if (gamepad2.right_bumper){
-            robot.leftClaw.setPosition(CLAW_OPEN); //opens the claw with rb
-            robot.rightClaw.setPosition(CLAW_OPEN);
+            leftClaw.setPosition(CLAW_OPEN); //opens the claw with rb
+            rightClaw.setPosition(CLAW_OPEN);
         }
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());

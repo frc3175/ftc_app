@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 /**
  * Created by tonyp on 10/28/2017.
  */
-@Autonomous(name="AutonBlueRight7140")
+@Autonomous(name="AutonBlueRight7140", group="Autonomous")
 public class AutonRedLeft7140 extends LinearOpMode{
     public HardwareMap7140 robot = new HardwareMap7140();
     public HardwareMap map = null;

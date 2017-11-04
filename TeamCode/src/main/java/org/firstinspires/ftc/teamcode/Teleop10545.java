@@ -14,6 +14,9 @@ public class Teleop10545 extends OpMode{
     public HardwareMap map = null;
     private ElapsedTime runTime = new ElapsedTime();
 
+    private static final double clawOpen = 0.1;
+    private static final double clawClosed = 0.5;
+
     public void init(){
         telemetry.addData("Status", "Initializing");
         robot.init(map);
@@ -46,6 +49,16 @@ public class Teleop10545 extends OpMode{
         robot.backRightDrive.setPower(rightPower);
         robot.frontRightDrive.setPower(rightPower);
 
+        robot.upDownArm.setPower(gamepad2.left_stick_y);
+        robot.inOutArm.setPower(gamepad2.right_stick_x);
+        if (gamepad2.b) {
+            robot.rightClaw.setPosition(clawOpen);
+            robot.leftClaw.setPosition(clawClosed);
+
+        } else if(gamepad2.x) {
+            robot.rightClaw.setPosition(clawOpen);
+            robot.leftClaw.setPosition(clawClosed);
+        }
 
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runTime.toString());

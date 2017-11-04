@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
  * Created by tonyp on 10/27/2017.
@@ -26,9 +25,8 @@ public class HardwareMap10545 {
     public Servo rightClaw = null;
 
     public HardwareMap map = null;
-    private ElapsedTime period  = new ElapsedTime();
 
-    public HardwareMap10545() { // construction
+    public HardwareMap10545() { // constructor
 
     }
 

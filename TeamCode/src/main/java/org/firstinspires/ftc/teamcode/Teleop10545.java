@@ -2,25 +2,44 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
  * Created by tonyp on 10/28/2017.
  */
-@TeleOp(name = "Teleop10545")
+@TeleOp(name = "Teleop10545", group="TeleOp")
 public class Teleop10545 extends OpMode{
-    public HardwareMap10545 robot = new HardwareMap10545();
-    public HardwareMap map = null;
     private ElapsedTime runTime = new ElapsedTime();
 
+    private DcMotor frontRightDrive = null; // declares the variable frontRightDrive
+    private DcMotor frontLeftDrive = null; // declares the variable frontLeftDrive
+    private DcMotor backLeftDrive = null; // declares the variable backLeftDrive
+    private DcMotor backRightDrive = null; //declares the variable backRightDrive
+
+    private DcMotor upDownArm = null;
+    private DcMotor inOutArm = null;
+
+    private Servo leftClaw = null;
+    private Servo rightClaw = null;
     private static final double clawOpen = 0.1;
     private static final double clawClosed = 0.5;
 
     public void init(){
         telemetry.addData("Status", "Initializing");
-        robot.init(map);
-        telemetry.addData("Status", "Initialized");
+        frontRightDrive = hardwareMap.get(DcMotor.class, "frontRightDrive"); // initializing frontRightDrive
+        frontLeftDrive = hardwareMap.get(DcMotor.class, "frontLeftDrive"); // initializing frontLeftDrive
+        backRightDrive = hardwareMap.get(DcMotor.class, "backRightDrive"); // initializing backRightDrive
+        backLeftDrive = hardwareMap.get(DcMotor.class, "backLeftDrive"); // initializing bckLeftDrive
+        frontLeftDrive.setDirection(DcMotorSimple.Direction.REVERSE); // reverses direction of the frontLeftDrive
+
+        upDownArm = hardwareMap.get(DcMotor.class, "upDownArm");
+        inOutArm = hardwareMap.get(DcMotor.class, "inOutArm");
+
+        leftClaw = hardwareMap.get(Servo.class, "leftClaw");
+        rightClaw = hardwareMap.get(Servo.class, "rightClaw");        telemetry.addData("Status", "Initialized");
     }
 
     /*
@@ -44,20 +63,20 @@ public class Teleop10545 extends OpMode{
         double rightPower;
         leftPower = -gamepad1.left_stick_y;
         rightPower = -gamepad1.right_stick_y;
-        robot.frontLeftDrive.setPower(leftPower);
-        robot.backLeftDrive.setPower(leftPower);
-        robot.backRightDrive.setPower(rightPower);
-        robot.frontRightDrive.setPower(rightPower);
+        frontLeftDrive.setPower(leftPower);
+        backLeftDrive.setPower(leftPower);
+        backRightDrive.setPower(rightPower);
+        frontRightDrive.setPower(rightPower);
 
-        robot.upDownArm.setPower(gamepad2.left_stick_y);
-        robot.inOutArm.setPower(gamepad2.right_stick_x);
+        upDownArm.setPower(gamepad2.left_stick_y);
+        inOutArm.setPower(gamepad2.right_stick_x);
         if (gamepad2.b) {
-            robot.rightClaw.setPosition(clawOpen);
-            robot.leftClaw.setPosition(clawClosed);
+            rightClaw.setPosition(clawOpen);
+            leftClaw.setPosition(clawClosed);
 
         } else if(gamepad2.x) {
-            robot.rightClaw.setPosition(clawOpen);
-            robot.leftClaw.setPosition(clawClosed);
+            rightClaw.setPosition(clawOpen);
+            leftClaw.setPosition(clawClosed);
         }
 
         // Show the elapsed game time and wheel power.

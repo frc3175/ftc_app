@@ -72,19 +72,31 @@ public class Teleop7140 extends OpMode {
     @Override
     public void init() {
         telemetry.addData("Status", "Initializing");
+        try {
+            leftFrontDrive = hardwareMap.dcMotor.get("LeftFrontDrive");//initializes motors
+            telemetry.addData("leftFrontDrive", "success");
+            leftBackDrive = hardwareMap.dcMotor.get("LeftBackDrive");
+            telemetry.addData("leftBackDrive", "success");
+            rightFrontDrive = hardwareMap.dcMotor.get("RightFrontDrive");
+            telemetry.addData("rightFrontDrive", "success");
+            rightBackDrive = hardwareMap.dcMotor.get("RightBackDrive");
+            telemetry.addData("rightBackDrive", "success");
+            strafeFrontDrive = hardwareMap.dcMotor.get("StrafeFrontDrive");
+            telemetry.addData("strafeFrontDrive", "success");
+            strafeBackDrive = hardwareMap.dcMotor.get("StrafeBackDrive");
+            telemetry.addData("strafeBackDrive", "success");
+            arm = hardwareMap.dcMotor.get("Arm");
+            telemetry.addData("arm", "success");
+            leftClaw = hardwareMap.servo.get("LeftClaw");
+            telemetry.addData("leftClaw", "success");
+            rightClaw = hardwareMap.servo.get("RightClaw");
+            telemetry.addData("rightClaw", "success");
 
-        leftFrontDrive = hardwareMap.dcMotor.get("LeftFrontDrive");//initializes motors
-        leftBackDrive = hardwareMap.dcMotor.get("LeftBackDrive");
-        rightFrontDrive = hardwareMap.dcMotor.get("RightFrontDrive");
-        rightBackDrive = hardwareMap.dcMotor.get("RightBackDrive");
-        strafeFrontDrive = hardwareMap.dcMotor.get("StrafeFrontDrive");
-        strafeBackDrive = hardwareMap.dcMotor.get("StrafeBackDrive");
-        arm = hardwareMap.dcMotor.get("Arm");
-        leftClaw = hardwareMap.servo.get("LeftClaw");
-        rightClaw = hardwareMap.servo.get("RightClaw");
-
-        CSensor = hardwareMap.colorSensor.get("ColorSensor");
-
+            CSensor = hardwareMap.colorSensor.get("ColorSensor");
+            telemetry.addData("CSensor", "success");
+        } catch (ExceptionInInitializerError ex) {
+            telemetry.addData("Exception", ex);
+        }
         rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
         //reverses direction of right motors, change if the direction is wrong

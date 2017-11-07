@@ -33,13 +33,15 @@ public class Teleop10545 extends OpMode{
         frontLeftDrive = hardwareMap.get(DcMotor.class, "frontLeftDrive"); // initializing frontLeftDrive
         backRightDrive = hardwareMap.get(DcMotor.class, "backRightDrive"); // initializing backRightDrive
         backLeftDrive = hardwareMap.get(DcMotor.class, "backLeftDrive"); // initializing bckLeftDrive
-        frontLeftDrive.setDirection(DcMotorSimple.Direction.REVERSE); // reverses direction of the frontLeftDrive
+        frontRightDrive.setDirection(DcMotorSimple.Direction.REVERSE); // reverses direction of the frontLeftDrive
+        backRightDrive.setDirection(DcMotorSimple.Direction.REVERSE);
 
         upDownArm = hardwareMap.get(DcMotor.class, "upDownArm");
         inOutArm = hardwareMap.get(DcMotor.class, "inOutArm");
 
         leftClaw = hardwareMap.get(Servo.class, "leftClaw");
-        rightClaw = hardwareMap.get(Servo.class, "rightClaw");        telemetry.addData("Status", "Initialized");
+        rightClaw = hardwareMap.get(Servo.class, "rightClaw");
+        telemetry.addData("Status", "Initialized");
     }
 
     /*
@@ -73,7 +75,6 @@ public class Teleop10545 extends OpMode{
         if (gamepad2.b) {
             rightClaw.setPosition(clawOpen);
             leftClaw.setPosition(clawClosed);
-
         } else if(gamepad2.x) {
             rightClaw.setPosition(clawOpen);
             leftClaw.setPosition(clawClosed);

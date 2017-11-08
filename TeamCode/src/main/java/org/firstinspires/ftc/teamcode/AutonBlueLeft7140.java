@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 /**
  * Created by tonyp on 10/28/2017.
  */
-@Autonomous(name="AutonBlueRight7140", group="Autonomous")
+@Autonomous(name="AutonBlueLeft7140", group="Autonomous")
 public class AutonBlueLeft7140 extends LinearOpMode{
     private DcMotor leftFrontDrive = null; //use left stick to go forward/back, use right stick to turn
     private DcMotor leftBackDrive = null;

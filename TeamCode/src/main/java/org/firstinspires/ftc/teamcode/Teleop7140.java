@@ -1,32 +1,3 @@
-/* Copyright (c) 2017 FIRST. All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided that
- * the following conditions are met:
- *
- * Redistributions of source code must retain the above copyright notice, this list
- * of conditions and the following disclaimer.
- *
- * Redistributions in binary form must reproduce the above copyright notice, this
- * list of conditions and the following disclaimer in the documentation and/or
- * other materials provided with the distribution.
- *
- * Neither the name of FIRST nor the names of its contributors may be used to endorse or
- * promote products derived from this software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
- * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -37,59 +8,48 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
- * The names of OpModes appear on the menu of the FTC Driver Station.
- * When an selection is made from the menu, the corresponding OpMode
- * class is instantiated on the Robot Controller and executed.
- *
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
+ * Created by tonyp on 10/21/2017.
  */
+@TeleOp (name = "Teleop7140", group="TeleOp")
+public class Teleop7140 extends OpMode{
 
-@TeleOp(name="Teleop7140", group="TeleOp")
-public class Teleop7140 extends OpMode {
-
-    // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
+
     private DcMotor leftFrontDrive = null; //use left stick to go forward/back, use right stick to turn
     private DcMotor leftBackDrive = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
-    private DcMotor strafeFrontDrive = null; //use bars
     private DcMotor strafeBackDrive = null;
+    private DcMotor strafeFrontDrive = null;
     private DcMotor arm = null;
     private Servo leftClaw = null;
     private Servo rightClaw = null;
-    private ColorSensor CSensor = null;
-
     private static final double TURN_POWER = 0.75;//sets constant for turn power
-    private static final double STRAFE_POWER = 0.5;//sets constant for strafe power
+    private static final double STRAFE_POWER = 1;//sets constant for strafe power
     private static final double ARM_POWER = 0.5; //sets arm power constant
     private static final double CLAW_OPEN = .5; //sets constants for claw open/closed positions
     private static final double CLAW_CLOSED = 0;
 
-    /*
-     * Code to run ONCE when the driver hits INIT
-     */
+
     @Override
     public void init() {
-        telemetry.addData("Status", "Initializing");
+        telemetry.addData("Status", "Initializing");//tells the user(s) that the robot is initializing
 
-        leftFrontDrive = hardwareMap.dcMotor.get("LeftFrontDrive");//initializes motors
-        leftBackDrive = hardwareMap.dcMotor.get("LeftBackDrive");
-        rightFrontDrive = hardwareMap.dcMotor.get("RightFrontDrive");
-        rightBackDrive = hardwareMap.dcMotor.get("RightBackDrive");
-        strafeFrontDrive = hardwareMap.dcMotor.get("StrafeFrontDrive");
-        strafeBackDrive = hardwareMap.dcMotor.get("StrafeBackDrive");
-        arm = hardwareMap.dcMotor.get("Arm");
-        leftClaw = hardwareMap.servo.get("LeftClaw");
-        rightClaw = hardwareMap.servo.get("RightClaw");
-        CSensor = hardwareMap.colorSensor.get("ColorSensor");
+        leftFrontDrive = hardwareMap.get(DcMotor.class, "LeftFrontDrive"); //initializes motors
+        leftBackDrive = hardwareMap.get(DcMotor.class, "LeftBackDrive");
+        rightFrontDrive = hardwareMap.get(DcMotor.class, "RightFrontDrive");
+        rightBackDrive = hardwareMap.get(DcMotor.class, "RightBackDrive");
+        strafeBackDrive = hardwareMap.get(DcMotor.class, "StrafeBackDrive");
+        strafeFrontDrive = hardwareMap.get(DcMotor.class, "StrafeFrontDrive");
+        arm = hardwareMap.get(DcMotor.class, "Arm");
+        leftClaw = hardwareMap.get(Servo.class, "LeftClaw");
+        rightClaw = hardwareMap.get(Servo.class, "RightClaw");
 
         rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
         //reverses direction of right motors, change if the direction is wrong
 
-        // Tell the driver that initialization is complete.
-        telemetry.addData("Status", "Initialized");
+        telemetry.addData("Status", "Initialized"); //tells the user(s) init. is finished
     }
 
     /*
@@ -107,9 +67,6 @@ public class Teleop7140 extends OpMode {
         runtime.reset();
     }
 
-    /*
-     * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
-     */
     @Override
     public void loop() {
         double leftPower = -gamepad1.left_stick_y;//defines variables used to move up&down
@@ -133,8 +90,8 @@ public class Teleop7140 extends OpMode {
         } else {
             strafeFrontDrive.setPower(0); //makes not pressing a bumper set strafe motors to 0 (again)
             strafeBackDrive.setPower(0);
-        }
 
+        }
         if (gamepad2.b){
             arm.setPower(ARM_POWER); //makes the b button raise the arm
         } else if (gamepad2.a){

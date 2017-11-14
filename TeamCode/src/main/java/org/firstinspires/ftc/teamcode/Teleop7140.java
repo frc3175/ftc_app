@@ -25,11 +25,12 @@ public class Teleop7140 extends OpMode{
     private Servo leftClaw = null;
     private Servo rightClaw = null;
     private static final double TURN_POWER = 0.75;//sets constant for turn power
-    private static final double STRAFE_POWER = 1;//sets constant for strafe power
+    private static final double STRAFE_POWER = 0.750;//sets constant for strafe power
     private static final double ARM_POWER = 0.5; //sets arm power constant
     private static final double CLAW_OPEN = .5; //sets constants for claw open/closed positions
     private static final double CLAW_CLOSED = 0;
-
+    private boolean LEFT_STRAFE = false; //sets strafing booleans
+    private boolean RIGHT_STRAFE = false;
 
     @Override
     public void init() {
@@ -77,21 +78,28 @@ public class Teleop7140 extends OpMode{
         leftBackDrive.setPower(leftPower);//uses left stick up&down
         rightFrontDrive.setPower(rightPower);
         rightBackDrive.setPower(rightPower);
-        if (gamepad1.left_bumper) {
-            strafeFrontDrive.setPower(-STRAFE_POWER);//makes left bumper set strafe motors to positive
+        if (gamepad1.left_bumper && !LEFT_STRAFE) {
+            LEFT_STRAFE = true;
+        } else if (gamepad1.left_bumper && LEFT_STRAFE) {
+            //Makes sure that when the left&right bumpers are pressed, the strafing starts or stops
+            LEFT_STRAFE = false;
+        }
+        if (gamepad1.right_bumper && !RIGHT_STRAFE) {
+            RIGHT_STRAFE = true;
+        } else if (gamepad1.right_bumper && RIGHT_STRAFE) {
+            RIGHT_STRAFE = false;
+        }
+        if (LEFT_STRAFE) {
+            strafeFrontDrive.setPower(-STRAFE_POWER);//makes left bumper set strafe motors to negative
             strafeBackDrive.setPower(-STRAFE_POWER);
+        } else if (RIGHT_STRAFE) {
+            strafeFrontDrive.setPower(STRAFE_POWER); //makes right bumper set strafe motors to positive
+            strafeBackDrive.setPower(STRAFE_POWER);
         } else {
             strafeFrontDrive.setPower(0); //makes not pressing a bumper set strafe motors to 0
             strafeBackDrive.setPower(0);
         }
-        if (gamepad1.right_bumper) {
-            strafeFrontDrive.setPower(STRAFE_POWER); //makes right bumper set strafe motors to negative
-            strafeBackDrive.setPower(STRAFE_POWER);
-        } else {
-            strafeFrontDrive.setPower(0); //makes not pressing a bumper set strafe motors to 0 (again)
-            strafeBackDrive.setPower(0);
 
-        }
         if (gamepad2.b){
             arm.setPower(ARM_POWER); //makes the b button raise the arm
         } else if (gamepad2.a){
@@ -101,10 +109,10 @@ public class Teleop7140 extends OpMode{
         }
         if (gamepad2.left_bumper) {
             leftClaw.setPosition(CLAW_CLOSED); //closes the claw with lb
-            rightClaw.setPosition(CLAW_CLOSED);
+            rightClaw.setPosition(CLAW_OPEN);
         } else if (gamepad2.right_bumper){
             leftClaw.setPosition(CLAW_OPEN); //opens the claw with rb
-            rightClaw.setPosition(CLAW_OPEN);
+            rightClaw.setPosition(CLAW_CLOSED);
         }
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());

@@ -24,8 +24,8 @@ public class Teleop7140 extends OpMode{
     private DcMotor arm = null;
     private Servo leftClaw = null;
     private Servo rightClaw = null;
+    private Servo jewelArm = null;
     private static final double TURN_POWER = 0.75;//sets constant for turn power
-    private static final double STRAFE_POWER = 0.750;//sets constant for strafe power
     private static final double ARM_POWER = 0.5; //sets arm power constant
     private static final double CLAW_OPEN = .5; //sets constants for claw open/closed positions
     private static final double CLAW_CLOSED = 0;
@@ -45,6 +45,8 @@ public class Teleop7140 extends OpMode{
         arm = hardwareMap.get(DcMotor.class, "Arm");
         leftClaw = hardwareMap.get(Servo.class, "LeftClaw");
         rightClaw = hardwareMap.get(Servo.class, "RightClaw");
+        jewelArm = hardwareMap.get(Servo.class, "JewelArm");
+
 
         rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -72,33 +74,14 @@ public class Teleop7140 extends OpMode{
     public void loop() {
         double leftPower = -gamepad1.left_stick_y;//defines variables used to move up&down
         double rightPower = -gamepad1.left_stick_y;
-        leftPower += gamepad1.right_stick_x * TURN_POWER; //enables turns
-        rightPower -= gamepad1.right_stick_x * TURN_POWER;//uses right stick left&right
+        leftPower += gamepad1.left_stick_x * TURN_POWER; //enables turns
+        rightPower -= gamepad1.left_stick_x * TURN_POWER;//uses right stick left&right
         leftFrontDrive.setPower(leftPower);//enables forward&backward movement
         leftBackDrive.setPower(leftPower);//uses left stick up&down
         rightFrontDrive.setPower(rightPower);
         rightBackDrive.setPower(rightPower);
-        if (gamepad1.left_bumper && !LEFT_STRAFE) {
-            LEFT_STRAFE = true;
-        } else if (gamepad1.left_bumper && LEFT_STRAFE) {
-            //Makes sure that when the left&right bumpers are pressed, the strafing starts or stops
-            LEFT_STRAFE = false;
-        }
-        if (gamepad1.right_bumper && !RIGHT_STRAFE) {
-            RIGHT_STRAFE = true;
-        } else if (gamepad1.right_bumper && RIGHT_STRAFE) {
-            RIGHT_STRAFE = false;
-        }
-        if (LEFT_STRAFE) {
-            strafeFrontDrive.setPower(-STRAFE_POWER);//makes left bumper set strafe motors to negative
-            strafeBackDrive.setPower(-STRAFE_POWER);
-        } else if (RIGHT_STRAFE) {
-            strafeFrontDrive.setPower(STRAFE_POWER); //makes right bumper set strafe motors to positive
-            strafeBackDrive.setPower(STRAFE_POWER);
-        } else {
-            strafeFrontDrive.setPower(0); //makes not pressing a bumper set strafe motors to 0
-            strafeBackDrive.setPower(0);
-        }
+        strafeFrontDrive.setPower(gamepad1.right_stick_x); //enables strafing
+        strafeBackDrive.setPower(gamepad1.right_stick_x);
 
         if (gamepad2.b){
             arm.setPower(ARM_POWER); //makes the b button raise the arm

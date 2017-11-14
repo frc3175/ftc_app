@@ -25,6 +25,7 @@ public class AutonRedRight7140 extends LinearOpMode{
     private Servo leftClaw = null;
     private Servo rightClaw = null;
     private ColorSensor CSensor = null;
+    private Servo jewelArm = null;
     private ElapsedTime runtime = new ElapsedTime();
     private static final double MOTOR_POWER = 0.5;
     private static final double STRAFE_POWER = 0.5;
@@ -59,7 +60,7 @@ public class AutonRedRight7140 extends LinearOpMode{
         arm = hardwareMap.get(DcMotor.class, "Arm");
         leftClaw = hardwareMap.get(Servo.class, "LeftClaw");
         rightClaw = hardwareMap.get(Servo.class, "RightClaw");
-
+        jewelArm = hardwareMap.get(Servo.class, "JewelArm");
         CSensor = hardwareMap.get(ColorSensor.class, "ColorSensor");
 
         rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);

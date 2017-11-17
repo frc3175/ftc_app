@@ -24,7 +24,7 @@ public class Teleop10545 extends OpMode{
 
     private Servo leftClaw = null;
     private Servo rightClaw = null;
-    private static final double clawOpen = 0.1;
+    private static final double clawOpen = 0;
     private static final double clawClosed = 0.5;
 
     public void init(){
@@ -70,14 +70,14 @@ public class Teleop10545 extends OpMode{
         backRightDrive.setPower(rightPower);
         frontRightDrive.setPower(rightPower);
 
-        upDownArm.setPower(gamepad2.left_stick_y);
+        upDownArm.setPower(-gamepad2.left_stick_y);
         inOutArm.setPower(gamepad2.right_stick_x);
         if (gamepad2.b) {
             rightClaw.setPosition(clawOpen);
             leftClaw.setPosition(clawClosed);
         } else if(gamepad2.x) {
-            rightClaw.setPosition(clawOpen);
-            leftClaw.setPosition(clawClosed);
+            rightClaw.setPosition(clawClosed);
+            leftClaw.setPosition(clawOpen);
         }
 
         // Show the elapsed game time and wheel power.

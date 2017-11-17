@@ -25,12 +25,9 @@ public class Teleop7140 extends OpMode{
     private Servo leftClaw = null;
     private Servo rightClaw = null;
     private Servo jewelArm = null;
+    private ColorSensor colorSensor = null;
     private static final double TURN_POWER = 0.75;//sets constant for turn power
     private static final double ARM_POWER = 0.5; //sets arm power constant
-    private static final double CLAW_OPEN = .5; //sets constants for claw open/closed positions
-    private static final double CLAW_CLOSED = 0;
-    private boolean LEFT_STRAFE = false; //sets strafing booleans
-    private boolean RIGHT_STRAFE = false;
 
     @Override
     public void init() {
@@ -47,10 +44,14 @@ public class Teleop7140 extends OpMode{
         rightClaw = hardwareMap.get(Servo.class, "RightClaw");
         jewelArm = hardwareMap.get(Servo.class, "JewelArm");
 
+        colorSensor = hardwareMap.get(ColorSensor.class, "ColorSensor");
+        colorSensor.enableLed(false);
 
         rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
         //reverses direction of right motors, change if the direction is wrong
+        leftClaw.setPosition(0.5);
+        rightClaw.setPosition(0);
 
         telemetry.addData("Status", "Initialized"); //tells the user(s) init. is finished
     }
@@ -91,11 +92,16 @@ public class Teleop7140 extends OpMode{
             arm.setPower(0); //makes sure that the motor is not moving if a or b is not pressed
         }
         if (gamepad2.left_bumper) {
-            leftClaw.setPosition(CLAW_CLOSED); //closes the claw with lb
-            rightClaw.setPosition(CLAW_OPEN);
+            leftClaw.setPosition(0); //closes the claw with lb
+            rightClaw.setPosition(0.5);
         } else if (gamepad2.right_bumper){
-            leftClaw.setPosition(CLAW_OPEN); //opens the claw with rb
-            rightClaw.setPosition(CLAW_CLOSED);
+            leftClaw.setPosition(0.45); //opens the claw with rb
+            rightClaw.setPosition(0.05);
+        }
+        if (gamepad2.x) {
+            jewelArm.setPosition(0);
+        } else if (gamepad2.y) {
+            jewelArm.setPosition(0.75);
         }
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());

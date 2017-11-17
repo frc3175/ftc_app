@@ -27,6 +27,7 @@ public class Teleop7140 extends OpMode{
     private Servo jewelArm = null;
     private ColorSensor colorSensor = null;
     private static final double TURN_POWER = 0.75;//sets constant for turn power
+    private static final double ARM_POWER = 0.5; //sets arm power constant
 
     @Override
     public void init() {
@@ -46,6 +47,7 @@ public class Teleop7140 extends OpMode{
         colorSensor = hardwareMap.get(ColorSensor.class, "ColorSensor");
         colorSensor.enableLed(false);
 
+        jewelArm.setPosition(1);
         rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
         //reverses direction of right motors, change if the direction is wrong
@@ -83,8 +85,13 @@ public class Teleop7140 extends OpMode{
         strafeFrontDrive.setPower(gamepad1.right_stick_x); //enables strafing
         strafeBackDrive.setPower(gamepad1.right_stick_x);
 
-        arm.setPower(-gamepad2.right_stick_y); //makes the y joystick raise the arm
-        arm.setPower(gamepad2.right_stick_y);
+        if (gamepad2.b){
+            arm.setPower(ARM_POWER); //makes the b button raise the arm
+        } else if (gamepad2.a){
+            arm.setPower(-ARM_POWER); //makes the a button lower the arm
+        } else {
+            arm.setPower(0); //makes sure that the motor is not moving if a or b is not pressed
+        }
 
         if (gamepad2.left_bumper) {
             leftClaw.setPosition(0); //closes the claw with lb
@@ -94,7 +101,7 @@ public class Teleop7140 extends OpMode{
             rightClaw.setPosition(0.05);
         }
         if (gamepad2.a) {
-            jewelArm.setPosition(0.5);
+            jewelArm.setPosition(0.65);
         } else if (gamepad2.y) {
             jewelArm.setPosition(1);
         }

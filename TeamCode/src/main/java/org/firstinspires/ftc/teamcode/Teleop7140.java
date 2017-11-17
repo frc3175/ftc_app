@@ -27,7 +27,6 @@ public class Teleop7140 extends OpMode{
     private Servo jewelArm = null;
     private ColorSensor colorSensor = null;
     private static final double TURN_POWER = 0.75;//sets constant for turn power
-    private static final double ARM_POWER = 0.5; //sets arm power constant
 
     @Override
     public void init() {
@@ -84,13 +83,9 @@ public class Teleop7140 extends OpMode{
         strafeFrontDrive.setPower(gamepad1.right_stick_x); //enables strafing
         strafeBackDrive.setPower(gamepad1.right_stick_x);
 
-        if (gamepad2.b){
-            arm.setPower(ARM_POWER); //makes the b button raise the arm
-        } else if (gamepad2.a){
-            arm.setPower(-ARM_POWER); //makes the a button lower the arm
-        } else {
-            arm.setPower(0); //makes sure that the motor is not moving if a or b is not pressed
-        }
+        arm.setPower(-gamepad2.right_stick_y); //makes the y joystick raise the arm
+        arm.setPower(gamepad2.right_stick_y);
+
         if (gamepad2.left_bumper) {
             leftClaw.setPosition(0); //closes the claw with lb
             rightClaw.setPosition(0.5);
@@ -98,10 +93,10 @@ public class Teleop7140 extends OpMode{
             leftClaw.setPosition(0.45); //opens the claw with rb
             rightClaw.setPosition(0.05);
         }
-        if (gamepad2.x) {
-            jewelArm.setPosition(0);
+        if (gamepad2.a) {
+            jewelArm.setPosition(0.5);
         } else if (gamepad2.y) {
-            jewelArm.setPosition(0.75);
+            jewelArm.setPosition(1);
         }
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());

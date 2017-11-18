@@ -99,10 +99,13 @@ public class Teleop7140 extends OpMode{
         } else if (gamepad2.right_bumper){
             leftClaw.setPosition(0.45); //opens the claw with rb
             rightClaw.setPosition(0.05);
-        }
-        if (gamepad2.a) {
-            jewelArm.setPosition(0.65);
         } else if (gamepad2.y) {
+            leftClaw.setPosition(0.25); //opens the claw with rb
+            rightClaw.setPosition(0.25);
+        }
+        if (gamepad2.dpad_down) {
+            jewelArm.setPosition(0.25);
+        } else if (gamepad2.dpad_up) {
             jewelArm.setPosition(1);
         }
         // Show the elapsed game time and wheel power.

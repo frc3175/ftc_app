@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -11,6 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Created by tonyp on 10/28/2017.
  */
 @Autonomous(name="AutonRedRight7140", group="Autonomous")
+@Disabled
 public class AutonRedRight7140 extends LinearOpMode{
 
     private DcMotor leftFrontDrive = null; //use left stick to go forward/back, use right stick to turn

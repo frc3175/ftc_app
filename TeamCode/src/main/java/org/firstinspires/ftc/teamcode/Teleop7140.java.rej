@@ -1,0 +1,18 @@
+diff a/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/Teleop7140.java b/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/Teleop7140.java	(rejected hunks)
+@@ -83,13 +83,9 @@
+         strafeFrontDrive.setPower(gamepad1.right_stick_x); //enables strafing
+         strafeBackDrive.setPower(gamepad1.right_stick_x);
+ 
+-        if (gamepad2.b){
+-            arm.setPower(ARM_POWER); //makes the b button raise the arm
+-        } else if (gamepad2.a){
+-            arm.setPower(-ARM_POWER); //makes the a button lower the arm
+-        } else {
+-            arm.setPower(0); //makes sure that the motor is not moving if a or b is not pressed
+-        }
++        arm.setPower(-gamepad2.right_stick_y); //makes the y joystick raise the arm
++        arm.setPower(gamepad2.right_stick_y);
++
+         if (gamepad2.left_bumper) {
+             leftClaw.setPosition(0); //closes the claw with lb
+             rightClaw.setPosition(0.5);

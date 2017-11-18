@@ -25,7 +25,7 @@ public class Teleop10545 extends OpMode{
     private Servo leftClaw = null;
     private Servo rightClaw = null;
     private static final double clawOpen = 0;
-    private static final double clawClosed = 0.5;
+    private static final double clawClosed = 1;
 
     public void init(){
         telemetry.addData("Status", "Initializing");

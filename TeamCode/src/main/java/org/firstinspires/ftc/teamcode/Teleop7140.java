@@ -51,8 +51,8 @@ public class Teleop7140 extends OpMode{
         rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
         //reverses direction of right motors, change if the direction is wrong
-        leftClaw.setPosition(0.5);
-        rightClaw.setPosition(0);
+        leftClaw.setPosition(0); //closes the claw with lb
+        rightClaw.setPosition(0.5);
 
         telemetry.addData("Status", "Initialized"); //tells the user(s) init. is finished
     }
@@ -74,8 +74,15 @@ public class Teleop7140 extends OpMode{
 
     @Override
     public void loop() {
-        double leftPower = -gamepad1.left_stick_y;//defines variables used to move up&down
-        double rightPower = -gamepad1.left_stick_y;
+        double leftPower;
+        double rightPower;
+        if (Math.abs(gamepad1.left_stick_y) <= 0.1) {
+            leftPower = 0;
+            rightPower = 0;
+        } else {
+            leftPower = -gamepad1.left_stick_y;//defines variables used to move up&down
+            rightPower = -gamepad1.left_stick_y;
+        }
         leftPower += gamepad1.left_stick_x * TURN_POWER; //enables turns
         rightPower -= gamepad1.left_stick_x * TURN_POWER;//uses right stick left&right
         leftFrontDrive.setPower(leftPower);//enables forward&backward movement

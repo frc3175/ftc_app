@@ -53,7 +53,7 @@ public class Auton7140 extends LinearOpMode {
     private Servo jewelArm = null;
     private ElapsedTime runtime = new ElapsedTime();
 
-    private static final double DRIVE_TIME = 0.8;
+    private static final double DRIVE_TIME = 1;
     private static final double FORWARD_SPEED = 0.5;
 
     @Override
@@ -75,8 +75,9 @@ public class Auton7140 extends LinearOpMode {
         jewelArm.setPosition(1);
         // Set the LED in the beginning
         CSensor.enableLed(false);
-        leftClaw.setPosition(0.5);
-        rightClaw.setPosition(0);
+
+        leftClaw.setPosition(0); //closes the claw with lb
+        rightClaw.setPosition(0.5);
 
         rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);

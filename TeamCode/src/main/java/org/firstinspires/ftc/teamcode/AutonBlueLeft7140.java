@@ -12,7 +12,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Created by tonyp on 10/28/2017.
  */
 @Autonomous(name="AutonBlueLeft7140", group="Autonomous")
-@Disabled
 public class AutonBlueLeft7140 extends LinearOpMode{
 
     private DcMotor leftFrontDrive = null; //use left stick to go forward/back, use right stick to turn
@@ -61,8 +60,8 @@ public class AutonBlueLeft7140 extends LinearOpMode{
         // Set the LED in the beginning
         CSensor.enableLed(true);
 
-        leftClaw.setPosition(0.5);
-        rightClaw.setPosition(0);
+        leftClaw.setPosition(0); //closes the claw with lb
+        rightClaw.setPosition(0.5);
 
         leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

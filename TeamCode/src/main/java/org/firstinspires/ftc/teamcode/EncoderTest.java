@@ -84,11 +84,11 @@ public class EncoderTest extends LinearOpMode {
 
     private static final double PULSES_PER_MOTOR_REV = 7;
     private static final double MOTOR_GEAR = 20;
-    private static final double COUNTS_PER_MOTOR_REV = PULSES_PER_MOTOR_REV * MOTOR_GEAR;
-    private static final double WHEEL_DIAMETER_INCHES = 4;     // For figuring circumference
+    private static final double COUNTS_PER_MOTOR_REV = 140;
+    private static final double WHEEL_DIAMETER_INCHES = 3;     // For figuring circumference
     private static final double COUNTS_PER_INCH = COUNTS_PER_MOTOR_REV / (WHEEL_DIAMETER_INCHES * 3.1415);
     private static final double SPEED = 0.4;
-    private static final double DISTANCE1 = 6;
+    private static final double DISTANCE1 = 144;
     private static final long STRAFE_TIME1 = 500;
     private static final long STRAFE_TIME2 = 2000;
 
@@ -112,6 +112,9 @@ public class EncoderTest extends LinearOpMode {
         CSensor = hardwareMap.get(ColorSensor.class, "ColorSensor");
 
         jewelArm.setPosition(1);
+
+        leftClaw.setPosition(0); //closes the claw with lb
+        rightClaw.setPosition(0.5);
 
         leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -146,21 +149,18 @@ public class EncoderTest extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        // Step through each leg of the path,
-        // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderDrive(DISTANCE1, 5.0);  // S1: Forward 12 Inches with 5 Sec timeout
-
-        if (CSensor.red() > CSensor.blue() && CSensor.red() > CSensor.green()) {
-            jewelArm.setPosition(0.25);
-            sleep(1000);
+        if (opModeIsActive()) {
+            // Step through each leg of the path,
+            // Note: Reverse movement is obtained by setting a negative distance (not speed)
+            encoderDrive(DISTANCE1, 5.0);  // S1: Forward 12 Inches with 5 Sec timeout
+            strafeBackDrive.setPower(SPEED);
+            strafeFrontDrive.setPower(SPEED);
+            sleep(STRAFE_TIME2);
+            strafeBackDrive.setPower(0);
+            strafeFrontDrive.setPower(0);
+            telemetry.addData("Path", "Complete");
+            telemetry.update();
         }
-        strafeBackDrive.setPower(SPEED);
-        strafeFrontDrive.setPower(SPEED);
-        sleep(STRAFE_TIME2);
-        strafeBackDrive.setPower(0);
-        strafeFrontDrive.setPower(0);
-        telemetry.addData("Path", "Complete");
-        telemetry.update();
     }
 
     /*
@@ -206,9 +206,9 @@ public class EncoderTest extends LinearOpMode {
             rightBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             runtime.reset();
-            while (leftBackPosition < newLeftBackTarget || leftFrontPosition < newLeftFrontTarget
-                    || rightBackPosition < newRightBackTarget || rightFrontPosition < newRightFrontTarget
-                    && runtime.seconds() <= timeOut) {
+            while (opModeIsActive() && (leftBackPosition < newLeftBackTarget) && (leftFrontPosition < newLeftFrontTarget)
+                    && (rightBackPosition < newRightBackTarget) && (rightFrontPosition < newRightFrontTarget)
+                    && (runtime.seconds() <= timeOut)) {
                 leftFrontDrive.setPower(Math.abs(SPEED));
                 leftBackDrive.setPower(Math.abs(SPEED));
                 rightBackDrive.setPower(Math.abs(SPEED));
@@ -222,8 +222,8 @@ public class EncoderTest extends LinearOpMode {
 
             // Stop all motion;
             leftFrontDrive.setPower(0);
-            rightFrontDrive.setPower(0);
             leftBackDrive.setPower(0);
+            rightFrontDrive.setPower(0);
             rightBackDrive.setPower(0);
 
             telemetry.addData("2 ", "motorFrontLeft:  " + String.format("%d", leftFrontDrive.getTargetPosition()));
@@ -240,4 +240,5 @@ public class EncoderTest extends LinearOpMode {
             sleep(500);   // optional pause after each move
         }
     }
+
 }

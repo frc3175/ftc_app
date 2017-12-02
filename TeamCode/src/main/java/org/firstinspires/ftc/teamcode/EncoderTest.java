@@ -43,30 +43,30 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
  * This file illustrates the concept of driving a path based on encoder counts.
  * It uses the common Pushbot hardware class to define the drive on the robot.
  * The code is structured as a LinearOpMode
- *
+ * <p>
  * The code REQUIRES that you DO have encoders on the wheels,
- *   otherwise you would use: PushbotAutoDriveByTime;
- *
- *  This code ALSO requires that the drive Motors have been configured such that a positive
- *  power command moves them forwards, and causes the encoders to count UP.
- *
- *   The desired path in this example is:
- *   - Drive forward for 48 inches
- *   - Spin right for 12 Inches
- *   - Drive Backwards for 24 inches
- *   - Stop and close the claw.
- *
- *  The code is written using a method called: encoderDrive(speed, leftInches, rightInches, timeoutS)
- *  that performs the actual movement.
- *  This methods assumes that each movement is relative to the last stopping place.
- *  There are other ways to perform encoder based moves, but this method is probably the simplest.
- *  This code uses the RUN_TO_POSITION mode to enable the Motor controllers to generate the run profile
- *
+ * otherwise you would use: PushbotAutoDriveByTime;
+ * <p>
+ * This code ALSO requires that the drive Motors have been configured such that a positive
+ * power command moves them forwards, and causes the encoders to count UP.
+ * <p>
+ * The desired path in this example is:
+ * - Drive forward for 48 inches
+ * - Spin right for 12 Inches
+ * - Drive Backwards for 24 inches
+ * - Stop and close the claw.
+ * <p>
+ * The code is written using a method called: encoderDrive(speed, leftInches, rightInches, timeoutS)
+ * that performs the actual movement.
+ * This methods assumes that each movement is relative to the last stopping place.
+ * There are other ways to perform encoder based moves, but this method is probably the simplest.
+ * This code uses the RUN_TO_POSITION mode to enable the Motor controllers to generate the run profile
+ * <p>
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Auto Drive By Encoder", group="Pushbot")
+@Autonomous(name = "Auto Drive By Encoder", group = "Pushbot")
 public class EncoderTest extends LinearOpMode {
 
     private DcMotor leftFrontDrive = null; //use left stick to go forward/back, use right stick to turn
@@ -80,7 +80,7 @@ public class EncoderTest extends LinearOpMode {
     private Servo rightClaw = null;
     private ColorSensor CSensor = null;
     private Servo jewelArm = null;
-    private ElapsedTime     runtime = new ElapsedTime();
+    private ElapsedTime runtime = new ElapsedTime();
 
     private static final double PULSES_PER_MOTOR_REV = 7;
     private static final double MOTOR_GEAR = 20;
@@ -132,13 +132,15 @@ public class EncoderTest extends LinearOpMode {
         leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        strafeBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        strafeFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Send telemetry message to indicate successful Encoder reset
-        telemetry.addData("Path0",  "Starting at %7d :%7d",
-                          leftFrontDrive.getCurrentPosition(),
-                          rightFrontDrive.getCurrentPosition(),
-                          leftBackDrive.getCurrentPosition(),
-                          rightBackDrive.getCurrentPosition());
+        telemetry.addData("Path0", "Starting at %7d :%7d",
+                leftFrontDrive.getCurrentPosition(),
+                rightFrontDrive.getCurrentPosition(),
+                leftBackDrive.getCurrentPosition(),
+                rightBackDrive.getCurrentPosition());
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
@@ -184,9 +186,9 @@ public class EncoderTest extends LinearOpMode {
 
             // Determine new target position, and pass to motor controller
             newLeftFrontTarget = leftFrontDrive.getCurrentPosition() + (int) Math.round((distance * COUNTS_PER_INCH));
-            newLeftBackTarget = leftFrontDrive.getCurrentPosition() + (int) Math.round((distance * COUNTS_PER_INCH));
+            newLeftBackTarget = leftBackDrive.getCurrentPosition() + (int) Math.round((distance * COUNTS_PER_INCH));
             newRightFrontTarget = rightFrontDrive.getCurrentPosition() + (int) Math.round((distance * COUNTS_PER_INCH));
-            newRightBackTarget = rightFrontDrive.getCurrentPosition() + (int) Math.round((distance * COUNTS_PER_INCH));
+            newRightBackTarget = rightBackDrive.getCurrentPosition() + (int) Math.round((distance * COUNTS_PER_INCH));
             leftFrontDrive.setTargetPosition(newLeftFrontTarget);
             leftBackDrive.setTargetPosition(newLeftBackTarget);
             rightFrontDrive.setTargetPosition(newRightFrontTarget);
@@ -204,13 +206,13 @@ public class EncoderTest extends LinearOpMode {
             rightBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             runtime.reset();
-            while(leftBackPosition < newLeftBackTarget && leftFrontPosition < newLeftFrontTarget
-                    && rightBackPosition < newRightBackTarget && rightFrontPosition < newRightFrontTarget
-                    && runtime.seconds() <= timeOut){
-                leftFrontDrive.setPower(SPEED);
-                leftBackDrive.setPower(SPEED);
-                rightBackDrive.setPower(SPEED);
-                rightFrontDrive.setPower(SPEED);
+            while (leftBackPosition < newLeftBackTarget || leftFrontPosition < newLeftFrontTarget
+                    || rightBackPosition < newRightBackTarget || rightFrontPosition < newRightFrontTarget
+                    && runtime.seconds() <= timeOut) {
+                leftFrontDrive.setPower(Math.abs(SPEED));
+                leftBackDrive.setPower(Math.abs(SPEED));
+                rightBackDrive.setPower(Math.abs(SPEED));
+                rightFrontDrive.setPower(Math.abs(SPEED));
 
                 leftFrontPosition = leftFrontDrive.getCurrentPosition();
                 leftBackPosition = leftBackDrive.getCurrentPosition();
@@ -218,16 +220,16 @@ public class EncoderTest extends LinearOpMode {
                 rightBackPosition = rightBackDrive.getCurrentPosition();
             }
 
-            telemetry.addData("2 ", "motorFrontLeft:  " + String.format("%d", leftFrontDrive.getTargetPosition()));
-            telemetry.addData("3 ", "motorFrontRight:  " + String.format("%d", rightFrontDrive.getTargetPosition()));
-            telemetry.addData("4 ", "motorBackLeft:  " + String.format("%d", leftBackDrive.getTargetPosition()));
-            telemetry.addData("5 ", "motorBackRight:  " + String.format("%d", rightBackDrive.getTargetPosition()));
-
             // Stop all motion;
             leftFrontDrive.setPower(0);
             rightFrontDrive.setPower(0);
             leftBackDrive.setPower(0);
             rightBackDrive.setPower(0);
+
+            telemetry.addData("2 ", "motorFrontLeft:  " + String.format("%d", leftFrontDrive.getTargetPosition()));
+            telemetry.addData("3 ", "motorFrontRight:  " + String.format("%d", rightFrontDrive.getTargetPosition()));
+            telemetry.addData("4 ", "motorBackLeft:  " + String.format("%d", leftBackDrive.getTargetPosition()));
+            telemetry.addData("5 ", "motorBackRight:  " + String.format("%d", rightBackDrive.getTargetPosition()));
 
             // Turn off RUN_TO_POSITION
             leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -235,7 +237,7 @@ public class EncoderTest extends LinearOpMode {
             leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-            sleep(250);   // optional pause after each move
+            sleep(500);   // optional pause after each move
         }
     }
 }

@@ -58,6 +58,7 @@ import org.firstinspires.ftc.robotcore.internal.android.dx.rop.cst.CstAnnotation
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 @Autonomous(name = "Sensor: MR Color", group = "Sensor")
+@Disabled
 public class ColorSensorTest extends LinearOpMode {
 
     private DcMotor leftFrontDrive = null; //use left stick to go forward/back, use right stick to turn

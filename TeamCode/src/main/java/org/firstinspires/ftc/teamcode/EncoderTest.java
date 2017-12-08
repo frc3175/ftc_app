@@ -67,6 +67,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
  */
 
 @Autonomous(name = "Auto Drive By Encoder", group = "Pushbot")
+@Disabled
 public class EncoderTest extends LinearOpMode {
 
     private DcMotor leftFrontDrive = null; //use left stick to go forward/back, use right stick to turn

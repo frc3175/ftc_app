@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.view.View;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -14,6 +15,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Created by tonyp on 12/2/2017.
  */
 @Autonomous
+@Disabled
 public class ColorSensorTest2 extends LinearOpMode {
 
     private DcMotor leftFrontDrive = null; //use left stick to go forward/back, use right stick to turn
@@ -27,13 +29,14 @@ public class ColorSensorTest2 extends LinearOpMode {
     private Servo rightClaw = null;
     private ColorSensor CSensor = null;
     private Servo jewelArm = null;
+    private Servo jewelArmHit = null;
     private ElapsedTime runtime = new ElapsedTime();
 
     private static final double COUNTS_PER_MOTOR_REV = 140;
     private static final double WHEEL_DIAMETER_INCHES = 3;     // For figuring circumference
     private static final double COUNTS_PER_INCH = COUNTS_PER_MOTOR_REV / (WHEEL_DIAMETER_INCHES * 3.1415);
     private static final double SPEED = 0.4;
-    private static final double DISTANCE1 = 24;
+    private static final double DISTANCE1 = 20;
     private static final long STRAFE_TIME1 = 500;
     private static final long STRAFE_TIME2 = 500;
 
@@ -70,8 +73,10 @@ public class ColorSensorTest2 extends LinearOpMode {
         leftClaw = hardwareMap.get(Servo.class, "LeftClaw");
         rightClaw = hardwareMap.get(Servo.class, "RightClaw");
         jewelArm = hardwareMap.get(Servo.class, "JewelArm");
+        jewelArmHit = hardwareMap.get(Servo.class, "JewelArmHit");
         CSensor = hardwareMap.get(ColorSensor.class, "ColorSensor");
 
+        jewelArmHit.setPosition(0.5);
         jewelArm.setPosition(1);
         CSensor.enableLed(true);
         leftClaw.setPosition(0); //closes the claw with lb
@@ -118,33 +123,41 @@ public class ColorSensorTest2 extends LinearOpMode {
         runtime.reset();
         while (opModeIsActive() && !ballDown && runtime.seconds() < 15) {
             if (CSensor.red() > CSensor.blue() && CSensor.red() > CSensor.green()) {
-                leftFrontDrive.setPower(-.2);
-                leftBackDrive.setPower(-.2);
-                rightFrontDrive.setPower(.2);
-                rightBackDrive.setPower(.2);
-                sleep(700);
-                leftFrontDrive.setPower(0);
-                leftBackDrive.setPower(0);
-                rightFrontDrive.setPower(0);
-                rightBackDrive.setPower(0);
+                jewelArm.setPosition(0.2);
+                sleep(500);
+                jewelArmHit.setPosition(0);
+                sleep(5000);
+//                leftFrontDrive.setPower(-.2);
+//                leftBackDrive.setPower(-.2);
+//                rightFrontDrive.setPower(.2);
+//                rightBackDrive.setPower(.2);
+//                sleep(700);
+//                leftFrontDrive.setPower(0);
+//                leftBackDrive.setPower(0);
+//                rightFrontDrive.setPower(0);
+//                rightBackDrive.setPower(0);
                 ballDown=true;
             } else if (CSensor.blue() > CSensor.red() && CSensor.blue() > CSensor.green()) {
-                leftFrontDrive.setPower(.2);
-                leftBackDrive.setPower(.2);
-                rightFrontDrive.setPower(-.2);
-                rightBackDrive.setPower(-.2);
-                sleep(700);
-                leftFrontDrive.setPower(0);
-                leftBackDrive.setPower(0);
-                rightFrontDrive.setPower(0);
-                rightBackDrive.setPower(0);
+                jewelArm.setPosition(0.2);
+                sleep(500);
+                jewelArmHit.setPosition(1);
+                sleep(5000);
+//                leftFrontDrive.setPower(.2);
+//                leftBackDrive.setPower(.2);
+//                rightFrontDrive.setPower(-.2);
+//                rightBackDrive.setPower(-.2);
+//                sleep(700);
+//                leftFrontDrive.setPower(0);
+//                leftBackDrive.setPower(0);
+//                rightFrontDrive.setPower(0);
+//                rightBackDrive.setPower(0);
                 ballDown=true;
             } else {
-                leftFrontDrive.setPower(-.2);
-                leftBackDrive.setPower(-.2);
-                rightFrontDrive.setPower(.2);
-                rightBackDrive.setPower(.2);
-                sleep(250);
+                leftFrontDrive.setPower(-.1);
+                leftBackDrive.setPower(-.1);
+                rightFrontDrive.setPower(.1);
+                rightBackDrive.setPower(.1);
+                sleep(100);
                 leftFrontDrive.setPower(0);
                 leftBackDrive.setPower(0);
                 rightFrontDrive.setPower(0);

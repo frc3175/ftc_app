@@ -24,7 +24,6 @@ public class Teleop7140 extends OpMode{
     private DcMotor arm = null;
     private Servo leftClaw = null;
     private Servo rightClaw = null;
-    private Servo jewelArm = null;
     private ColorSensor colorSensor = null;
     private static final double TURN_POWER = 0.75;//sets constant for turn power
     private static final double ARM_POWER = 0.5; //sets arm power constant
@@ -42,12 +41,10 @@ public class Teleop7140 extends OpMode{
         arm = hardwareMap.get(DcMotor.class, "Arm");
         leftClaw = hardwareMap.get(Servo.class, "LeftClaw");
         rightClaw = hardwareMap.get(Servo.class, "RightClaw");
-        jewelArm = hardwareMap.get(Servo.class, "JewelArm");
 
         colorSensor = hardwareMap.get(ColorSensor.class, "ColorSensor");
         colorSensor.enableLed(false);
 
-        jewelArm.setPosition(1);
         rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
         //reverses direction of right motors, change if the direction is wrong
@@ -104,17 +101,13 @@ public class Teleop7140 extends OpMode{
             leftClaw.setPosition(0); //closes the claw with lb
             rightClaw.setPosition(0.5);
         } else if (gamepad2.right_bumper){
-            leftClaw.setPosition(0.45); //opens the claw with rb
-            rightClaw.setPosition(0.05);
+            leftClaw.setPosition(0.7); //opens the claw with rb
+            rightClaw.setPosition(0);
         } else if (gamepad2.y) {
-            leftClaw.setPosition(0.25); //opens the claw with rb
-            rightClaw.setPosition(0.25);
+            leftClaw.setPosition(0.5); //opens the claw with rb
+            rightClaw.setPosition(0.17);
         }
-        if (gamepad2.dpad_down) {
-            jewelArm.setPosition(0.25);
-        } else if (gamepad2.dpad_up) {
-            jewelArm.setPosition(1);
-        }
+
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);

@@ -1,20 +1,20 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
+import android.app.Activity;
+import android.view.View;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.IntegratingGyroscope;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 
 /**
  * Created by tonyp on 12/2/2017.
  */
-@Autonomous (name = "Red", group = "Autonomous")
-public class AutonRedLeft7140 extends LinearOpMode {
+@Autonomous
+public class ColorSensorTest3 extends LinearOpMode {
 
     private DcMotor leftFrontDrive = null; //use left stick to go forward/back, use right stick to turn
     private DcMotor leftBackDrive = null;
@@ -26,8 +26,6 @@ public class AutonRedLeft7140 extends LinearOpMode {
     private Servo leftClaw = null;
     private Servo rightClaw = null;
     private ColorSensor CSensor = null;
-    private IntegratingGyroscope gyro;
-    private ModernRoboticsI2cGyro modernRoboticsI2cGyro;
     private ElapsedTime runtime = new ElapsedTime();
 
     private static final double COUNTS_PER_MOTOR_REV = 140;
@@ -35,7 +33,8 @@ public class AutonRedLeft7140 extends LinearOpMode {
     private static final double COUNTS_PER_INCH = COUNTS_PER_MOTOR_REV / (WHEEL_DIAMETER_INCHES * 3.1415);
     private static final double SPEED = 0.1;
     private static final double DISTANCE1 = 36;
-    private static final double DISTANCE2 = 50;
+    private static final long STRAFE_TIME1 = 500;
+    private static final long STRAFE_TIME2 = 500;
 
     private boolean ballDown = false;
 
@@ -52,8 +51,6 @@ public class AutonRedLeft7140 extends LinearOpMode {
         leftClaw = hardwareMap.get(Servo.class, "LeftClaw");
         rightClaw = hardwareMap.get(Servo.class, "RightClaw");
         CSensor = hardwareMap.get(ColorSensor.class, "ColorSensor");
-        modernRoboticsI2cGyro = hardwareMap.get(ModernRoboticsI2cGyro.class, "Gyro");
-        gyro = (IntegratingGyroscope)modernRoboticsI2cGyro;
 
         CSensor.enableLed(true);
         leftClaw.setPosition(0); //closes the claw with lb
@@ -87,21 +84,6 @@ public class AutonRedLeft7140 extends LinearOpMode {
                 rightBackDrive.getCurrentPosition());
         telemetry.update();
 
-        // Start calibrating the gyro. This takes a few seconds and is worth performing
-        // during the initialization phase at the start of each opMode.
-        telemetry.log().add("Gyro Calibrating. Do Not Move!");
-        modernRoboticsI2cGyro.calibrate();
-        // Wait until the gyro calibration is complete
-        runtime.reset();
-        while (!isStopRequested() && modernRoboticsI2cGyro.isCalibrating())  {
-            telemetry.addData("calibrating", "%s", Math.round(runtime.seconds())%2==0 ? "|.." : "..|");
-            telemetry.update();
-            sleep(50);
-        }
-        telemetry.log().clear();
-        telemetry.log().add("Gyro Calibrated. Press Start.");
-        telemetry.clear();
-
         // wait for the start button to be pressed.
         waitForStart();
 
@@ -112,34 +94,16 @@ public class AutonRedLeft7140 extends LinearOpMode {
         }
 
         runtime.reset();
-        while (opModeIsActive() && !ballDown && runtime.seconds() < 8) {
-            if (CSensor.blue() > CSensor.red() && CSensor.blue() > CSensor.green()) {
+        while (opModeIsActive() && !ballDown && runtime.seconds() < 20) {
+            if (CSensor.red() > CSensor.blue() && CSensor.red() > CSensor.green()) {
                 rightClaw.setPosition(0);
                 sleep(2000);
                 ballDown=true;
-            } else if (CSensor.red() > CSensor.blue() && CSensor.red() > CSensor.green()) {
+            } else if (CSensor.blue() > CSensor.red() && CSensor.blue() > CSensor.green()) {
                 leftClaw.setPosition(0.5);
                 sleep(2000);
                 ballDown=true;
             }
-        }
-        runtime.reset();
-        if (opModeIsActive() && runtime.seconds() < 5) {
-            encoderDrive(-DISTANCE1, 5.0);
-            sleep(500);
-            gyroDrive(270, 5);
-//            leftFrontDrive.setPower(-SPEED);
-//            leftBackDrive.setPower(-SPEED);
-//            rightFrontDrive.setPower(SPEED);
-//            rightBackDrive.setPower(SPEED);
-//            sleep(1000);
-//            leftFrontDrive.setPower(0);
-//            leftBackDrive.setPower(0);3
-//            rightFrontDrive.setPower(0);
-//            rightBackDrive.setPower(0);
-            sleep(500);
-            encoderDrive(DISTANCE2, 5.0);
-            sleep(500);
         }
     }
 
@@ -155,6 +119,7 @@ public class AutonRedLeft7140 extends LinearOpMode {
 
         // Ensure that the opmode is still active
         if (opModeIsActive()) {
+
             // Determine new target position, and pass to motor controller
             newLeftFrontTarget = leftFrontDrive.getCurrentPosition() + (int) Math.round((distance * COUNTS_PER_INCH));
             newLeftBackTarget = leftBackDrive.getCurrentPosition() + (int) Math.round((distance * COUNTS_PER_INCH));
@@ -209,25 +174,6 @@ public class AutonRedLeft7140 extends LinearOpMode {
             rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             sleep(500);   // optional pause after each move
-        }
-    }
-
-    private void gyroDrive(int angle, double timeOut) {
-        runtime.reset();
-        int heading;
-        if (opModeIsActive() && runtime.seconds() < timeOut){
-            heading = modernRoboticsI2cGyro.getHeading();
-            while (heading <= angle) {
-                leftFrontDrive.setPower(-SPEED);
-                leftBackDrive.setPower(-SPEED);
-                rightFrontDrive.setPower(SPEED);
-                rightBackDrive.setPower(SPEED);
-                heading = modernRoboticsI2cGyro.getHeading();
-            }
-            leftFrontDrive.setPower(0);
-            leftBackDrive.setPower(0);
-            rightFrontDrive.setPower(0);
-            rightBackDrive.setPower(0);
         }
     }
 

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -11,6 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Created by tonyp on 10/21/2017.
  */
 @TeleOp (name = "PracticeOpMode", group="TeleOp")
+@Disabled
 public class PracticeOpMode extends OpMode{
 
     private ElapsedTime runtime = new ElapsedTime();

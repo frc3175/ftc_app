@@ -63,8 +63,8 @@ public class Teleop10545 extends OpMode{
     public void loop() {
         double leftPower;
         double rightPower;
-        leftPower = -gamepad1.left_stick_y;
-        rightPower = -gamepad1.right_stick_y;
+        leftPower = -gamepad1.left_stick_y * 0.5;
+        rightPower = -gamepad1.right_stick_y * 0.5;
         frontLeftDrive.setPower(leftPower);
         backLeftDrive.setPower(leftPower);
         backRightDrive.setPower(rightPower);

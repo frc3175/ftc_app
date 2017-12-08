@@ -53,7 +53,7 @@ public class Auton10545 extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
 
-    private static final double FORWARD_SPEED = 0.6;
+    private static final double FORWARD_SPEED = 0.2;
     private static final double DRIVE_TIME = 2.0;
 
     @Override

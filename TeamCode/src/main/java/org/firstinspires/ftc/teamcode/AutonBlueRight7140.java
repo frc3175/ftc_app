@@ -34,7 +34,7 @@ public class AutonBlueRight7140 extends LinearOpMode {
     private static final double WHEEL_DIAMETER_INCHES = 3;     // For figuring circumference
     private static final double COUNTS_PER_INCH = COUNTS_PER_MOTOR_REV / (WHEEL_DIAMETER_INCHES * 3.1415);
     private static final double SPEED = 0.1;
-    private static final double DISTANCE1 = 36;
+    private static final double DISTANCE1 = 72;
     private static final double DISTANCE2 = 50;
 
     private boolean ballDown = false;
@@ -101,7 +101,6 @@ public class AutonBlueRight7140 extends LinearOpMode {
         telemetry.log().clear();
         telemetry.log().add("Gyro Calibrated. Press Start.");
         telemetry.clear();
-
         // wait for the start button to be pressed.
         waitForStart();
 
@@ -123,26 +122,35 @@ public class AutonBlueRight7140 extends LinearOpMode {
                 ballDown=true;
             }
         }
-        runtime.reset();
-        if (opModeIsActive() && runtime.seconds() < 5) {
-            encoderDrive(-DISTANCE1, 5.0);
-            sleep(500);
-            gyroDrive(90, 5);
-//            leftFrontDrive.setPower(SPEED);
-//            leftBackDrive.setPower(SPEED);
+//        runtime.reset();
+//        if (opModeIsActive() && runtime.seconds() < 17) {
+//            leftFrontDrive.setPower(-SPEED);
+//            leftBackDrive.setPower(-SPEED);
 //            rightFrontDrive.setPower(-SPEED);
 //            rightBackDrive.setPower(-SPEED);
-//            sleep(1000);
+//            sleep(3000);
 //            leftFrontDrive.setPower(0);
 //            leftBackDrive.setPower(0);
 //            rightFrontDrive.setPower(0);
 //            rightBackDrive.setPower(0);
-            sleep(500);
-            encoderDrive(DISTANCE2, 5.0);
-        }
+//            sleep(500);
+//            gyroDrive(270, 5);
+////            leftFrontDrive.setPower(SPEED);
+////            leftBackDrive.setPower(SPEED);
+////            rightFrontDrive.setPower(-SPEED);
+////            rightBackDrive.setPower(-SPEED);
+////            sleep(1000);
+////            leftFrontDrive.setPower(0);
+////            leftBackDrive.setPower(0);
+////            rightFrontDrive.setPower(0);
+////            rightBackDrive.setPower(0);
+//            sleep(500);
+//            encoderDrive(DISTANCE2, 5.0);
+//        }
     }
 
     public void encoderDrive(double distance, double timeOut) {
+        int magnitude = (int) (Math.abs(distance)/distance);
         int newLeftFrontTarget;
         int leftFrontPosition;
         int newLeftBackTarget;
@@ -180,10 +188,10 @@ public class AutonBlueRight7140 extends LinearOpMode {
             while (opModeIsActive() && (leftBackPosition < newLeftBackTarget) && (leftFrontPosition < newLeftFrontTarget)
                     && (rightBackPosition < newRightBackTarget) && (rightFrontPosition < newRightFrontTarget)
                     && (runtime.seconds() <= timeOut)) {
-                leftFrontDrive.setPower(Math.abs(SPEED));
-                leftBackDrive.setPower(Math.abs(SPEED));
-                rightBackDrive.setPower(Math.abs(SPEED));
-                rightFrontDrive.setPower(Math.abs(SPEED));
+                leftFrontDrive.setPower(SPEED*magnitude);
+                leftBackDrive.setPower(SPEED*magnitude);
+                rightBackDrive.setPower(SPEED*magnitude);
+                rightFrontDrive.setPower(SPEED*magnitude);
 
                 leftFrontPosition = leftFrontDrive.getCurrentPosition();
                 leftBackPosition = leftBackDrive.getCurrentPosition();
@@ -217,7 +225,7 @@ public class AutonBlueRight7140 extends LinearOpMode {
         int heading;
         if (opModeIsActive() && runtime.seconds() < timeOut){
             heading = modernRoboticsI2cGyro.getHeading();
-            while (heading <= angle) {
+            while (heading >= angle) {
                 leftFrontDrive.setPower(SPEED);
                 leftBackDrive.setPower(SPEED);
                 rightFrontDrive.setPower(-SPEED);
